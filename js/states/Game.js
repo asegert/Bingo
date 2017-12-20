@@ -4,8 +4,10 @@ var Bingo = Bingo || {};
 Bingo.GameState = {
   init: function() 
   {  
-      this.currBall=null;  
+      this.currBall=null; 
+      this.boardData = [[], [], [], [], []];
       this.dabs = this.add.group();
+      this.lastDab = null;
       //What has been called
       this.call= [
                     [1, 10, 12, 20, 21, 28, 33, 39, 42, 43, 50, 60, 67, 74, 77, 78, 84, 90],  //B
@@ -18,15 +20,19 @@ Bingo.GameState = {
       //Displays the last three calls
       this.last3 = [[null, null], [null, null], [null, null]];
       this.setBall();
-      console.log(this.call);
       this.getBall();
   },
   create: function()
   {   
       this.board = this.add.sprite(75, 300, Bingo.Board);
       this.populateBoard();
-      
       this.timer = this.time.events.loop(Phaser.Timer.SECOND * 5, this.getBall, this);
+      this.computeButton = this.add.button(500, 0, 'B', function()
+      {
+          this.boardData[this.lastDab.i][this.lastDab.j].marked = false;
+          this.dabs.remove(this.lastDab);
+          this.lastDab = null;
+      }, this);
   },
   update: function()
   {
@@ -117,10 +123,8 @@ Bingo.GameState = {
       }
       this.currBall.alpha = 1;
       this.currBall.called = true;
-      
-      //console.log(col);
+
       this.colFill[col] = this.colFill[col]+1;
-      //console.log(this.colFill);
   },
   populateBoard: function()
   {
@@ -128,10 +132,12 @@ Bingo.GameState = {
       {
           for(var j=0; j<5; j++)
           {
-              var currentBall = this.call[i][Math.floor(Math.random()*18)];
+              var tempRand = Math.floor(Math.random()*18);
+              var currentBall = this.call[i][tempRand];
               while(currentBall.onBoard)
               {
-                  currentBall = this.call[i][Math.floor(Math.random()*18)];
+                  tempRand = Math.floor(Math.random()*18);
+                  currentBall = this.call[i][tempRand];
               }
               currentBall.onBoard = true;
               
@@ -141,20 +147,27 @@ Bingo.GameState = {
                   stroke: '#000000',
                   strokeThickness: 7
               };
+              this.boardData[i][j]=this.call[i][tempRand];
+              this.boardData[i][j].buttonX=147+(88 * i);
+              this.boardData[i][j].buttonY=480+(86 * j);
               var text = this.add.text(147+(88 * i), 480+(86 * j), currentBall.num, style);
               text.anchor.setTo(0.5, 0.5);
+              text.data=currentBall;
+              text.i=i;
+              text.j=j;
               text.inputEnabled=true;
               text.events.onInputDown.add(function(button)
               {
-                  if(!button.marked)
+                  if(!button.data.marked)
                   {
-                      console.log(this);
                       var dab = this.add.sprite(button.x, button.y, 'dab');
+                      dab.i=button.i;
+                      dab.j=button.j;
                       dab.anchor.setTo(0.5, 0.5);
                       this.dabs.add(dab);
                       this.world.bringToTop(this.dabs);
-                      
-                      button.marked=true;
+                      this.lastDab = dab;
+                      button.data.marked=true;
                   }    
               }, this);
           }
@@ -199,31 +212,86 @@ Bingo.GameState = {
           this.last3[2][1].scale.setTo(0.5, 0.5);
       }
   },
-  checkForWin: function()
+  checkWin: function()
   {
-      //pseudo code
-      //Have array for board
-      //Path1=all in line b
-      //Path2=all in line I
-      //Path3=all in line n
-      //Path4=all in line g
-      //Path5=all in line 0
-      //Path6=across 0
-      //Path7=across 1
-      //Path8=across 2
-      //Path9=across 3
-      //Path10=across 4
-      //Path11=diagonal left
-      //Path12=diagonal right
+      var arrCheck = this.computeWin();
+      var win = false;
       
-      //check 11+12 first use if marked && called
-      //If it fails set the path down and across to failed as well
-      
-      //Check across
-      //If it fails set the path down to failed as well
-      
-      //Check down
-      
-      //if anypath is true return win
+      for(var i=0; i<arrCheck.length; i++)
+      {
+          if(arrCheck)
+          {
+              win=true;
+              break;
+          }
+      }
+      return win;
+  },
+  computeWin: function()
+  {
+      //0->'B', 1->'I', 2->'N', 3->'G', 4->'O',
+      //5->TopRow, 6->NextRow, 7->NextRow, 8->NextRow, 9->BottomRow,
+      //10->DiagonalLeft, 11->DiagonalRight
+      var Paths = [true, true, true, true, true, true, true, true, true, true, true, true]//missed 3, 2, 7
+      console.log(Bingo.GameState.boardData);
+      for(var i=0; i<Bingo.GameState.boardData.length; i++)
+      {
+          for(var j=0; j<Bingo.GameState.boardData[i].length; j++)
+          {
+              if(!Bingo.GameState.boardData[i][j].marked || !Bingo.GameState.boardData[i][j].called)
+              {
+                  Paths[i] = false;
+                  Paths[(j+5)] = false;
+                  
+                  if(i==j)
+                  {
+                      Paths[10] = false;
+                  }
+                  if((i+j)==4)
+                  {
+                      Paths[11] =false;
+                  }
+              }
+              else
+              {
+                  console.log("i: "+i+" j: "+j);
+              }
+          }
+      }
+      console.log(Paths);
+      return Paths;
+  },
+  checkMarks: function()
+  {
+      for(var i=0; i<Bingo.GameState.boardData.length; i++)
+      {
+          for(var j=0; j<Bingo.GameState.boardData[i].length; j++)
+          {
+              if(Bingo.GameState.boardData[i][j].called && !Bingo.GameState.boardData[i][j].marked)
+              {
+                 console.log(Bingo.GameState.boardData[i][j]);
+                  var dab = Bingo.GameState.add.sprite(Bingo.GameState.boardData[i][j].buttonX, Bingo.GameState.boardData[i][j].buttonY, 'dab');
+                      dab.i=i;
+                      dab.j=j;
+                      dab.anchor.setTo(0.5, 0.5);
+                      Bingo.GameState.dabs.add(dab);
+                      Bingo.GameState.world.bringToTop(Bingo.GameState.dabs);
+                      
+                      Bingo.GameState.boardData[i][j].marked=true;
+              }
+              else if(!Bingo.GameState.boardData[i][j].called && Bingo.GameState.boardData[i][j].marked)
+              {
+                  Bingo.GameState.boardData[i][j].marked = false;
+                  
+                  Bingo.GameState.dabs.forEach(function(dab)
+                  {
+                      if(dab.i==i && dab.j==j)
+                      {
+                          Bingo.GameState.dabs.remove(dab);
+                      }
+                  }, this);
+              }
+          }
+      }
   }
 };

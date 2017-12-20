@@ -24,9 +24,23 @@ Bingo.StoryState = {
           button.inputEnabled = true;
           button.events.onInputDown.add(function(button)
           {
+              //Have time specific objects come out
               Bingo.Board = button.key;
               Bingo.Color = button.color;
               this.state.start('Game');
+          }, this);
+          button.events.onInputOver.add(function(button)
+          {
+              this.emitter = this.add.emitter(button.position.x, button.position.y, 200);
+
+              this.emitter.makeParticles(['B', 'I', 'N', 'G', 'O']);
+              this.emitter.minParticleScale = 0.25;
+              this.emitter.maxParticleScale = 0.25;
+              this.emitter.start(false, 1000, 20);
+          }, this);
+          button.events.onInputOut.add(function(button)
+          {
+              this.emitter.on = false;
           }, this);
       }
   }
