@@ -4,13 +4,16 @@ var Bingo = Bingo || {};
 Bingo.StoryState = {
   create: function() 
   {
+      //If we are playing again skip the main screen and go straight to card selection
       if(Bingo.Again !=undefined)
       {
+          //Set up background and audio
           this.background=this.add.sprite(0, 0, 'secondary');
           this.backgroundAudio = this.add.audio('opening');
           this.backgroundAudio.play('', 0, 1, true);
-          
+          //Prevents cars being loaded
           this.nextCar = -1;
+          //Sets up card picking
           this.add.text(150, 450, "Choose your Bingo Card", {fill: '#ffffff'});
           this.createTickets(['BCBlue', 'BCBrown', 'BCGreen', 'BCLime', 'BCOrange', 'BCPink', 'BCPurple', 'BCRed'], 
                              ['#C2996B', '#67B1CC', '#5CB946', '#0B6839', '#BE202F', '#93298E', '#EC2D7B', '#FCAB35'],
@@ -22,13 +25,16 @@ Bingo.StoryState = {
       }
       else
       {
+        //Sets the next car in the sequence
         this.nextCar = 2;
+        //Sets the direction of the sequence
+        //Forward or backwards through time
         this.carUp = true;
-      
+        //Sets up background for main screen and audio
         this.background=this.add.sprite(0, 0, 'main');
         this.backgroundAudio = this.add.audio('opening');
         this.backgroundAudio.play('', 0, 1, true);
-      
+        //Creates clock hands
         this.hand1 = this.add.sprite(315, 215, 'hand');
         this.hand1.scale.setTo(1, 1.5);
         this.hand1.pivot.x = 0;
@@ -38,12 +44,13 @@ Bingo.StoryState = {
         this.hand2.pivot.x = 0;
         this.hand2.pivot.y = 0;
         this.hand2.rotation = Math.random();
-      
+        //Sets the current car in the animation
         this.car = this.add.sprite(350, 270, 'car1');
         this.car.rotation = 0.2;
-      
+        //Sets play button for main screen
         this.play = this.add.button(0, 400, 'play', function()
         {
+            //Set up for second screen (ticket selection)
             this.background.loadTexture('secondary', 0, false);
             this.car.destroy();
             this.nextCar = -1;
@@ -59,25 +66,29 @@ Bingo.StoryState = {
             this.play.kill();
         
         }, this);
-      
+      //Timer for car switches
       this.timer = this.time.events.loop(Phaser.Timer.SECOND * 2, this.switch, this);
       }
   },
   update: function()
   {
+      //Updates clock hand rotation
+        //Clockwise for cars getting newer
+        //Counter Clockwise for cars getting older
       if(this.carUp)
-      {
-          this.hand1.rotation +=0.2;
-          this.hand2.rotation +=Math.random();
-      }
-      else
       {
           this.hand1.rotation -=0.2;
           this.hand2.rotation -=Math.random();
       }
+      else
+      {
+          this.hand1.rotation +=0.2;
+          this.hand2.rotation +=Math.random();
+      }
   },
   switch: function()
   {
+      //Switches to the next car and resets the fade
       if(this.nextCar != -1)
       {
           this.fade = this.add.tween(this.car).to( { alpha: 0 }, 1000, "Linear", true);
@@ -112,8 +123,10 @@ Bingo.StoryState = {
   },
   createTickets: function(array, color, images, audio)
   {
+      //Creates the clickable tickets
       for(var i=0; i< array.length; i++)
       {
+          //Resets x values for the second half and updates the y
           var y = 750;
           var x=4;
           if(i<4)
@@ -121,7 +134,7 @@ Bingo.StoryState = {
               y=550;
               x=0;
           }
-          
+          //Creates the card button with a corresponding color from the color array and the buttons index to be used for info from other arrays when button is selected
           var button = this.add.button(((i-x)*150)+30, y, array[i]);
           button.scale.setTo(0.2, 0.2);
           button.color=color[i];
@@ -129,16 +142,22 @@ Bingo.StoryState = {
           button.inputEnabled = true;
           button.events.onInputDown.add(function(button)
           {
-              //Have time specific objects come out
+              //Sets the global variables
+              //Card style
               Bingo.Board = button.key;
+              //Text Color
               Bingo.Color = button.color;
+              //Images for the theme -> background and 2 details
               Bingo.Images = images[button.index];
+              //Audio for the 'time'
               Bingo.Audio = audio[button.index];
+              //Stop opening audio
               this.backgroundAudio.stop();
               this.state.start('Game');
           }, this);
           button.events.onInputOver.add(function(button)
           {
+              //Start the emitter and make the 2 detail images visible
               this.emitter = this.add.emitter(button.position.x, button.position.y, 200);
 
               this.emitter.makeParticles(['B', 'I', 'N', 'G', 'O']);
@@ -152,10 +171,12 @@ Bingo.StoryState = {
               this.img2 = this.add.sprite((button.position.x-20), button.position.y+110, images[button.index][1]);
               this.img2.anchor.setTo(0.5, 0.5);
               
+              //Make sure card stays on top
               this.world.bringToTop(button);
           }, this);
           button.events.onInputOut.add(function(button)
           {
+              //Turn off emitter and special features
               this.emitter.on = false;
               this.img.destroy();
               this.img2.destroy();

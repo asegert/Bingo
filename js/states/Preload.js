@@ -118,14 +118,14 @@ Bingo.PreloadState = {
     this.load.image('G', 'assets/images/G.png');
     this.load.image('O', 'assets/images/O.png');
       
-    this.load.image('BCBlue', 'assets/images/BingoCardBlue.jpg');
-    this.load.image('BCBrown', 'assets/images/BingoCardBrown.jpg');
-    this.load.image('BCGreen', 'assets/images/BingoCardGreen.jpg');
-    this.load.image('BCLime', 'assets/images/BingoCardLime.jpg');
-    this.load.image('BCOrange', 'assets/images/BingoCardOrange.jpg');
-    this.load.image('BCPink', 'assets/images/BingoCardPink.jpg');
-    this.load.image('BCPurple', 'assets/images/BingoCardPurple.jpg');
-    this.load.image('BCRed', 'assets/images/BingoCardRed.jpg');
+    this.load.image('BCBlue', 'assets/images/BingoCardBlue.png');
+    this.load.image('BCBrown', 'assets/images/BingoCardBrown.png');
+    this.load.image('BCGreen', 'assets/images/BingoCardGreen.png');
+    this.load.image('BCLime', 'assets/images/BingoCardLime.png');
+    this.load.image('BCOrange', 'assets/images/BingoCardOrange.png');
+    this.load.image('BCPink', 'assets/images/BingoCardPink.png');
+    this.load.image('BCPurple', 'assets/images/BingoCardPurple.png');
+    this.load.image('BCRed', 'assets/images/BingoCardRed.png');
       
     this.load.image('dab', 'assets/images/dab_red.png');
       

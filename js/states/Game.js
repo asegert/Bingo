@@ -4,16 +4,22 @@ var Bingo = Bingo || {};
 Bingo.GameState = {
   init: function() 
   {  
+      //Background and audio pulled from global variables
       this.background = this.add.sprite(0, 0, Bingo.Images[2]);
       this.backgroundAudio = this.add.audio(Bingo.Audio);
       this.backgroundAudio.play('', 0, 1, true);
+      //Details pulled from global variables
       this.detail1=this.add.sprite(530, 400, Bingo.Images[0]);
       this.detail1.scale.setTo(2, 2);
       this.detail2=this.add.sprite(400, 100, Bingo.Images[1]);
       this.detail2.scale.setTo(2, 2);
+      //The current ball (number) being called
       this.currBall=null; 
+      //Stores the data for the numbers on the board
       this.boardData = [[], [], [], [], []];
+      //Holds all the dabs on the board
       this.dabs = this.add.group();
+      //Last dab done by player
       this.lastDab = null;
       //What has been called
       this.call= [
@@ -109,8 +115,8 @@ Bingo.GameState = {
       
       if(this.colFill[0] == 18 && this.colFill[1] == 18 && this.colFill[2] == 18 && this.colFill[3] == 18)
       {
-          this.time.events.stop();
-          console.log('endGame');
+          this.backgroundAudio.stop();
+          Bingo.game.state.start('End');
       }
 
       //Add check if entire column has been called
@@ -187,7 +193,7 @@ Bingo.GameState = {
               {
                   if(!button.data.marked)
                   {
-                      var dab = this.add.sprite(button.x, button.y, 'dab');
+                      var dab = this.add.sprite(button.position.x - 5, button.position.y - 5, 'dab');
                       dab.i=button.i;
                       dab.j=button.j;
                       dab.anchor.setTo(0.5, 0.5);
@@ -300,7 +306,7 @@ Bingo.GameState = {
               if(Bingo.GameState.boardData[i][j].called && !Bingo.GameState.boardData[i][j].marked)
               {
                  console.log(Bingo.GameState.boardData[i][j]);
-                  var dab = Bingo.GameState.add.sprite(Bingo.GameState.boardData[i][j].buttonX, Bingo.GameState.boardData[i][j].buttonY, 'dab');
+                  var dab = Bingo.GameState.add.sprite(Bingo.GameState.boardData[i][j].buttonX-5, Bingo.GameState.boardData[i][j].buttonY-5, 'dab');
                       dab.i=i;
                       dab.j=j;
                       dab.anchor.setTo(0.5, 0.5);
