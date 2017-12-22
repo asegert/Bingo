@@ -10,7 +10,16 @@ Bingo.PreloadState = {
     this.load.setPreloadSprite(this.preloadBar);*/
 
     //audio
-    //this.load.audio('background', ['assets/audio/background.m4a', 'assets/audio/background.mp3', 'assets/audio/background.ogg']);
+    this.load.audio('future', ['assets/audio/future.m4a', 'assets/audio/future.mp3', 'assets/audio/future.ogg']);
+    this.load.audio('oldHollywood', ['assets/audio/oldHollywood.m4a', 'assets/audio/oldHollywood.mp3', 'assets/audio/oldHollywood.ogg']);
+    this.load.audio('jazz', ['assets/audio/jazz.m4a', 'assets/audio/jazz.mp3', 'assets/audio/jazz.ogg']);
+    this.load.audio('70s', ['assets/audio/70s.m4a', 'assets/audio/70s.mp3', 'assets/audio/70s.ogg']);
+    this.load.audio('60s', ['assets/audio/60s.m4a', 'assets/audio/60s.mp3', 'assets/audio/60s.ogg']);
+    this.load.audio('90s', ['assets/audio/90s.m4a', 'assets/audio/90s.mp3', 'assets/audio/90s.ogg']);
+    this.load.audio('vaudeville', ['assets/audio/vaudeville.m4a', 'assets/audio/vaudeville.mp3', 'assets/audio/vaudeville.ogg']);
+    this.load.audio('50s', ['assets/audio/50s.m4a', 'assets/audio/50s.mp3', 'assets/audio/50s.ogg']);
+    this.load.audio('opening', ['assets/audio/opening.m4a', 'assets/audio/opening.mp3', 'assets/audio/opening.ogg']);
+    this.load.audio('win', ['assets/audio/win.m4a', 'assets/audio/win.mp3', 'assets/audio/win.ogg']);
     //images
     this.load.image('1', 'assets/images/1.png');
     this.load.image('2', 'assets/images/2.png');
@@ -119,6 +128,57 @@ Bingo.PreloadState = {
     this.load.image('BCRed', 'assets/images/BingoCardRed.jpg');
       
     this.load.image('dab', 'assets/images/dab_red.png');
+      
+    this.load.image('play', 'assets/images/play.png');
+    this.load.image('undo', 'assets/images/undo.png');
+    this.load.image('check', 'assets/images/check.png');
+    this.load.image('bingo', 'assets/images/bingo.png');
+    this.load.image('popper', 'assets/images/BallPopperTop.png');
+    this.load.image('stand', 'assets/images/BallPopperStand.png');
+      
+    this.load.image('main', 'assets/images/main.png');
+    this.load.image('secondary', 'assets/images/secondary.png');
+    this.load.image('last', 'assets/images/last.png');
+    this.load.image('playAgain', 'assets/images/playAgain.png');
+    this.load.image('hand', 'assets/images/hand.png');
+    this.load.image('car1', 'assets/images/car1.png');
+    this.load.image('car2', 'assets/images/car2.png');
+    this.load.image('car3', 'assets/images/car3.png');
+    this.load.image('car4', 'assets/images/car4.png');
+    this.load.image('car5', 'assets/images/car5.png');
+      
+    //Future
+    this.load.image('futureBackground', 'assets/images/futureBackground.jpg');
+    this.load.image('future1', 'assets/images/future1.png');
+    this.load.image('future2', 'assets/images/future2.png');
+    //HollyWood
+    this.load.image('hollywoodBackground', 'assets/images/hollywoodBackground.png');
+    this.load.image('hollywood1', 'assets/images/hollywood1.png');
+    this.load.image('hollywood2', 'assets/images/hollywood2.png');
+    //Jazz
+    this.load.image('jazzBackground', 'assets/images/jazzBackground.png');
+    this.load.image('jazz1', 'assets/images/jazz1.png');
+    this.load.image('jazz2', 'assets/images/jazz2.png');
+    //70s
+    this.load.image('70sBackground', 'assets/images/70sBackground.png');
+    this.load.image('70s1', 'assets/images/70s1.png');
+    this.load.image('70s2', 'assets/images/70s2.png');
+    //60s
+    this.load.image('60sBackground', 'assets/images/60sBackground.png');
+    this.load.image('60s1', 'assets/images/60s1.png');
+    this.load.image('60s2', 'assets/images/60s2.png');
+    //90s
+    this.load.image('90sBackground', 'assets/images/90sBackground.png');
+    this.load.image('90s1', 'assets/images/90s1.png');
+    this.load.image('90s2', 'assets/images/90s2.png');
+    //60s
+    this.load.image('vaudevilleBackground', 'assets/images/vaudevilleBackground.png');
+    this.load.image('vaudeville1', 'assets/images/vaudeville1.png');
+    this.load.image('vaudeville2', 'assets/images/vaudeville2.png');
+    //50s
+    this.load.image('50sBackground', 'assets/images/50sBackground.png');
+    this.load.image('50s1', 'assets/images/50s1.png');
+    this.load.image('50s2', 'assets/images/50s2.png');
     //Data
     
     //this.load.text('BingoData', 'assets/data/BingoData.json');

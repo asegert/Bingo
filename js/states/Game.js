@@ -4,6 +4,13 @@ var Bingo = Bingo || {};
 Bingo.GameState = {
   init: function() 
   {  
+      this.background = this.add.sprite(0, 0, Bingo.Images[2]);
+      this.backgroundAudio = this.add.audio(Bingo.Audio);
+      this.backgroundAudio.play('', 0, 1, true);
+      this.detail1=this.add.sprite(530, 400, Bingo.Images[0]);
+      this.detail1.scale.setTo(2, 2);
+      this.detail2=this.add.sprite(400, 100, Bingo.Images[1]);
+      this.detail2.scale.setTo(2, 2);
       this.currBall=null; 
       this.boardData = [[], [], [], [], []];
       this.dabs = this.add.group();
@@ -26,17 +33,37 @@ Bingo.GameState = {
   {   
       this.board = this.add.sprite(75, 300, Bingo.Board);
       this.populateBoard();
+      this.popper = this.add.sprite(100, 100, 'popper');
+      this.popper.scale.setTo(0.7, 0.7);
+      this.popper.anchor.setTo(0.5, 0.5);
+      this.popperStand = this.add.sprite(28, 170, 'stand');
+      this.popperStand.scale.setTo(0.7, 0.7);
       this.timer = this.time.events.loop(Phaser.Timer.SECOND * 5, this.getBall, this);
-      this.computeButton = this.add.button(500, 0, 'B', function()
+      this.undoButton = this.add.button(550, 0, 'undo', function()
       {
-          this.boardData[this.lastDab.i][this.lastDab.j].marked = false;
-          this.dabs.remove(this.lastDab);
-          this.lastDab = null;
+          if(this.lastDab != null)
+          {
+              this.boardData[this.lastDab.i][this.lastDab.j].marked = false;
+              this.dabs.remove(this.lastDab);
+              this.lastDab = null;
+          }
+      }, this);
+      this.checkButton = this.add.button(550, 80, 'check', function()
+      {
+          this.checkMarks();
+      }, this);
+      this.bingoButton = this.add.button(550, 160, 'bingo', function()
+      {
+          if(this.checkWin())
+          {
+              this.backgroundAudio.stop();
+              Bingo.game.state.start('End');
+          }
       }, this);
   },
   update: function()
   {
-      
+      this.popper.rotation += 0.05;
   },
   setBall: function()
   {
@@ -44,7 +71,7 @@ Bingo.GameState = {
       {
           for(var j=0; j<this.call[i].length; j++)
           {
-                var ball = this.add.sprite(100, 0, this.call[i][j]);
+                var ball = this.add.sprite(300, 0, this.call[i][j]);
                 ball.alpha = 0;
                 ball.num = this.call[i][j];
                 ball.marked = false;
@@ -96,23 +123,23 @@ Bingo.GameState = {
       
       if(col == 0)
       {
-          this.ball1 = this.add.sprite(0, 0, "B");
+          this.ball1 = this.add.sprite(200, 0, "B");
       }
       else if(col == 1)
       {
-          this.ball1 = this.add.sprite(0, 0, "I");
+          this.ball1 = this.add.sprite(200, 0, "I");
       }
       else if(col == 2)
       {
-          this.ball1 = this.add.sprite(0, 0, "N");
+          this.ball1 = this.add.sprite(200, 0, "N");
       }
       else if(col == 3)
       {
-          this.ball1 = this.add.sprite(0, 0, "G");
+          this.ball1 = this.add.sprite(200, 0, "G");
       }
       else
       {
-          this.ball1 = this.add.sprite(0, 0, "O");
+          this.ball1 = this.add.sprite(200, 0, "O");
       }
       
       this.currBall = this.call[col][Math.floor(Math.random()*18)];
@@ -188,27 +215,30 @@ Bingo.GameState = {
       {
           this.last3[0][0].y=100;
           this.last3[0][0].scale.setTo(0.5, 0.5);
-          this.last3[0][0].x=50;
+          this.last3[0][0].x=295;
           this.last3[0][0].alpha = 1;
           this.last3[0][1].y=100;
+          this.last3[0][1].x=245;
           this.last3[0][1].scale.setTo(0.5, 0.5);
       }
       if(this.last3[1][0]!=null)
       {
           this.last3[1][0].y=150;
           this.last3[1][0].scale.setTo(0.5, 0.5);
-          this.last3[1][0].x=50;
+          this.last3[1][0].x=295;
           this.last3[1][0].alpha = 1;
           this.last3[1][1].y=150;
+          this.last3[1][1].x=245;
           this.last3[1][1].scale.setTo(0.5, 0.5);
       }
       if(this.last3[2][0]!=null)
       {
           this.last3[2][0].y=200;
           this.last3[2][0].scale.setTo(0.5, 0.5);
-          this.last3[2][0].x=50;
+          this.last3[2][0].x=295;
           this.last3[2][0].alpha = 1;
           this.last3[2][1].y=200;
+          this.last3[2][1].x=245;
           this.last3[2][1].scale.setTo(0.5, 0.5);
       }
   },
@@ -232,7 +262,7 @@ Bingo.GameState = {
       //0->'B', 1->'I', 2->'N', 3->'G', 4->'O',
       //5->TopRow, 6->NextRow, 7->NextRow, 8->NextRow, 9->BottomRow,
       //10->DiagonalLeft, 11->DiagonalRight
-      var Paths = [true, true, true, true, true, true, true, true, true, true, true, true]//missed 3, 2, 7
+      var Paths = [true, true, true, true, true, true, true, true, true, true, true, true]
       console.log(Bingo.GameState.boardData);
       for(var i=0; i<Bingo.GameState.boardData.length; i++)
       {
