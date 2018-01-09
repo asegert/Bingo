@@ -1,5 +1,4 @@
 var Bingo = Bingo || {};
-
 Bingo.game = new Phaser.Game(640, 960, Phaser.AUTO);
 
 Bingo.game.state.add('Boot', Bingo.BootState); 

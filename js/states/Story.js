@@ -4,6 +4,11 @@ var Bingo = Bingo || {};
 Bingo.StoryState = {
   create: function() 
   {
+      console.log('k');
+      //holds the card buttons so they can be removed when the screen changes
+      this.cardGroup = this.add.group();
+      //holds the dabber buttons so they can be removed when the screen changes
+      this.markerGroup = this.add.group();
       //If we are playing again skip the main screen and go straight to card selection
       if(Bingo.Again !=undefined)
       {
@@ -14,18 +19,19 @@ Bingo.StoryState = {
           //Prevents cars being loaded
           this.nextCar = -1;
           //Sets up card picking
-          this.add.text(150, 450, "Choose your Bingo Card", {fill: '#ffffff'});
+          this.text = this.add.text(150, 450, "Choose your Bingo Card", {fill: '#ffffff'});
           this.createTickets(['BCBlue', 'BCBrown', 'BCGreen', 'BCLime', 'BCOrange', 'BCPink', 'BCPurple', 'BCRed'], 
-                             ['#C2996B', '#67B1CC', '#5CB946', '#0B6839', '#BE202F', '#93298E', '#EC2D7B', '#FCAB35'],
-                             [['future1', 'future2', 'futureBackground'], ['hollywood1', 'hollywood2', 'hollywoodBackground'], 
-                              ['jazz1', 'jazz2', 'jazzBackground'], ['70s1', '70s2', '70sBackground'], 
-                              ['60s1', '60s2', '60sBackground'], ['90s1', '90s2', '90sBackground'], 
-                              ['vaudeville1', 'vaudeville2', 'vaudevilleBackground'], ['50s1', '50s2', '50sBackground']],
-                             ['future', 'oldHollywood', 'jazz', '70s', '60s', '90s', 'vaudeville', '50s']);
-      }
+                                ['#C2996B', '#67B1CC', '#5CB946', '#0B6839', '#BE202F', '#93298E', '#EC2D7B', '#FCAB35'],
+                                [['future1', 'future2', 'futureBackground', 'futureEmit'], 
+                                 ['hollywood1', 'hollywood2', 'hollywoodBackground', 'hollywoodEmit'], 
+                                 ['jazz1', 'jazz2', 'jazzBackground', 'jazzEmit'], ['70s1', '70s2', '70sBackground', '70sEmit'], 
+                                 ['60s1', '60s2', '60sBackground', '60sEmit'], ['90s1', '90s2', '90sBackground', '90sEmit'], 
+                                 ['vaudeville1', 'vaudeville2', 'vaudevilleBackground', 'vaudevilleEmit'], ['50s1', '50s2', '50sBackground', '50sEmit']],
+                                 ['future', 'oldHollywood', 'jazz', '70s', '60s', '90s', 'vaudeville', '50s']);
+      } 
       else
       {
-        //Sets the next car in the sequence
+          //Sets the next car in the sequence
         this.nextCar = 2;
         //Sets the direction of the sequence
         //Forward or backwards through time
@@ -55,14 +61,15 @@ Bingo.StoryState = {
             this.car.destroy();
             this.nextCar = -1;
           
-            this.add.text(150, 450, "Choose your Bingo Card", {fill: '#ffffff'});
+            this.text = this.add.text(150, 450, "Choose your Bingo Card", {fill: '#ffffff'});
             this.createTickets(['BCBlue', 'BCBrown', 'BCGreen', 'BCLime', 'BCOrange', 'BCPink', 'BCPurple', 'BCRed'], 
                                 ['#C2996B', '#67B1CC', '#5CB946', '#0B6839', '#BE202F', '#93298E', '#EC2D7B', '#FCAB35'],
-                                [['future1', 'future2', 'futureBackground'], ['hollywood1', 'hollywood2', 'hollywoodBackground'], 
-                                ['jazz1', 'jazz2', 'jazzBackground'], ['70s1', '70s2', '70sBackground'], 
-                                ['60s1', '60s2', '60sBackground'], ['90s1', '90s2', '90sBackground'], 
-                                ['vaudeville1', 'vaudeville2', 'vaudevilleBackground'], ['50s1', '50s2', '50sBackground']],
-                                ['future', 'oldHollywood', 'jazz', '70s', '60s', '90s', 'vaudeville', '50s']);
+                                [['future1', 'future2', 'futureBackground', 'futureEmit'], 
+                                 ['hollywood1', 'hollywood2', 'hollywoodBackground', 'hollywoodEmit'], 
+                                 ['jazz1', 'jazz2', 'jazzBackground', 'jazzEmit'], ['70s1', '70s2', '70sBackground', '70sEmit'], 
+                                 ['60s1', '60s2', '60sBackground', '60sEmit'], ['90s1', '90s2', '90sBackground', '90sEmit'], 
+                                 ['vaudeville1', 'vaudeville2', 'vaudevilleBackground', 'vaudevilleEmit'], ['50s1', '50s2', '50sBackground', '50sEmit']],
+                                 ['future', 'oldHollywood', 'jazz', '70s', '60s', '90s', 'vaudeville', '50s']);
             this.play.kill();
         
         }, this);
@@ -153,7 +160,13 @@ Bingo.StoryState = {
               Bingo.Audio = audio[button.index];
               //Stop opening audio
               this.backgroundAudio.stop();
-              this.state.start('Game');
+              //Remove Cards
+              this.cardGroup.removeAll();
+              //Set Dabber Text
+              this.text.setText("Choose your Bingo Dabber");
+              //Create Dabbers
+              this.createDabbers(['dabber1R', 'dabber1B', 'dabber1G'], ['dabber2R', 'dabber2B', 'dabber2G'], ['dabR', 'dabB', 'dabG']);
+              
           }, this);
           button.events.onInputOver.add(function(button)
           {
@@ -181,6 +194,53 @@ Bingo.StoryState = {
               this.img.destroy();
               this.img2.destroy();
           }, this);
+          this.cardGroup.add(button);
+          this.world.bringToTop(this.cardGroup);
       }
+  },
+  createDabbers: function(dabber1, dabber2, color)
+  {
+      //Creates the clickable tickets
+      for(var i=0; i< 3; i++)
+      {
+          //Creates the dabber button with a corresponding color from the color array 
+          var button = this.add.button(((i)*170)+100, 600, dabber1[i]);
+          button.color=color[i];
+          button.dabber1=dabber1[i];
+          button.dabber2=dabber2[i];
+          button.inputEnabled = true;
+          button.events.onInputDown.add(function(button)
+          {
+              //Set the dabber color for the game
+              Bingo.dabber = button.color;
+              //Call to move to next screen
+              this.migrate();
+          }, this);
+          button.events.onInputOver.add(function(button)
+          {
+              //Switch the dabber image to open dabber
+              button.loadTexture(button.dabber2);
+              //Make sure card stays on top
+              this.world.bringToTop(button);
+          }, this);
+          button.events.onInputOut.add(function(button)
+          {
+              //Switch back to closed dabber
+              button.loadTexture(button.dabber1); 
+              //Make sure card stays on top
+              this.world.bringToTop(button);
+          }, this);
+          this.markerGroup.add(button);
+          this.world.bringToTop(this.markerGroup);
+      }
+  },
+  migrate: function()
+  {
+      //Remove the dabbers
+      this.markerGroup.removeAll();
+      //Stop Audio
+      this.backgroundAudio.stop();
+      //Start the game
+      this.state.start('Game');
   }
 };

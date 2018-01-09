@@ -2,7 +2,8 @@ var Bingo = Bingo || {};
 
 //loading the game assets
 Bingo.PreloadState = {
-  preload: function() {
+  preload: function() 
+  {
     //show loading screen
     /*this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'bar');
     this.preloadBar.anchor.setTo(0.5);
@@ -127,7 +128,17 @@ Bingo.PreloadState = {
     this.load.image('BCPurple', 'assets/images/BingoCardPurple.png');
     this.load.image('BCRed', 'assets/images/BingoCardRed.png');
       
-    this.load.image('dab', 'assets/images/dab_red.png');
+    this.load.image('dabR', 'assets/images/dab_red.png');
+    this.load.image('dabB', 'assets/images/dab_blue.png');
+    this.load.image('dabG', 'assets/images/dab_green.png');
+      
+    this.load.image('dabber1R', 'assets/images/bingodabber_upright.png');
+    this.load.image('dabber1B', 'assets/images/bingodabber_uprightB.png');
+    this.load.image('dabber1G', 'assets/images/bingodabber_uprightG.png');
+      
+    this.load.image('dabber2R', 'assets/images/bingodabber_angled.png');
+    this.load.image('dabber2B', 'assets/images/bingodabber_angledB.png');
+    this.load.image('dabber2G', 'assets/images/bingodabber_angledG.png');
       
     this.load.image('play', 'assets/images/play.png');
     this.load.image('undo', 'assets/images/undo.png');
@@ -151,40 +162,49 @@ Bingo.PreloadState = {
     this.load.image('futureBackground', 'assets/images/futureBackground.jpg');
     this.load.image('future1', 'assets/images/future1.png');
     this.load.image('future2', 'assets/images/future2.png');
+    this.load.spritesheet('futureEmit', 'assets/images/futureEmit.png', 250, 250);
     //HollyWood
     this.load.image('hollywoodBackground', 'assets/images/hollywoodBackground.png');
     this.load.image('hollywood1', 'assets/images/hollywood1.png');
     this.load.image('hollywood2', 'assets/images/hollywood2.png');
+    this.load.spritesheet('hollywoodEmit', 'assets/images/hollywoodEmit.png', 250, 250);
     //Jazz
     this.load.image('jazzBackground', 'assets/images/jazzBackground.png');
     this.load.image('jazz1', 'assets/images/jazz1.png');
     this.load.image('jazz2', 'assets/images/jazz2.png');
+    this.load.spritesheet('jazzEmit', 'assets/images/jazzEmit.png', 250, 250);
     //70s
     this.load.image('70sBackground', 'assets/images/70sBackground.png');
     this.load.image('70s1', 'assets/images/70s1.png');
     this.load.image('70s2', 'assets/images/70s2.png');
+    this.load.spritesheet('70sEmit', 'assets/images/70sEmit.png', 250, 250);
     //60s
     this.load.image('60sBackground', 'assets/images/60sBackground.png');
     this.load.image('60s1', 'assets/images/60s1.png');
     this.load.image('60s2', 'assets/images/60s2.png');
+    this.load.spritesheet('60sEmit', 'assets/images/60sEmit.png', 250, 250);
     //90s
     this.load.image('90sBackground', 'assets/images/90sBackground.png');
     this.load.image('90s1', 'assets/images/90s1.png');
     this.load.image('90s2', 'assets/images/90s2.png');
+    this.load.spritesheet('90sEmit', 'assets/images/90sEmit.png', 250, 250);
     //60s
     this.load.image('vaudevilleBackground', 'assets/images/vaudevilleBackground.png');
     this.load.image('vaudeville1', 'assets/images/vaudeville1.png');
     this.load.image('vaudeville2', 'assets/images/vaudeville2.png');
+    this.load.spritesheet('vaudevilleEmit', 'assets/images/vaudevilleEmit.png', 250, 250);
     //50s
     this.load.image('50sBackground', 'assets/images/50sBackground.png');
     this.load.image('50s1', 'assets/images/50s1.png');
     this.load.image('50s2', 'assets/images/50s2.png');
+    this.load.spritesheet('50sEmit', 'assets/images/50sEmit.png', 250, 250);
     //Data
     
     //this.load.text('BingoData', 'assets/data/BingoData.json');
 
   },
-  create: function() {
+  create: function() 
+  {
     this.state.start('Story');
   }
 };

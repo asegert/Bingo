@@ -1,7 +1,8 @@
 var Bingo = Bingo || {};
 
 Bingo.BootState = {
-  init: function() {
+  init: function() 
+  {
     //loading screen will have a white background
     this.game.stage.backgroundColor = '#fff';
 
@@ -11,11 +12,13 @@ Bingo.BootState = {
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
   },
-  preload: function() {
+  preload: function() 
+  {
     //assets we'll use in the loading screen
     //this.load.image('bar', 'assets/images/preloader-bar.png');
   },
-  create: function() {
+  create: function() 
+  {
     this.state.start('Preload');
   }
 };
