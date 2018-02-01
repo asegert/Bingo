@@ -1,4 +1,4 @@
-//Sets up game
+init()//Sets up game
 var Bingo = Bingo || {};
 
 Bingo.GameState = {

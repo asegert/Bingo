@@ -4,7 +4,6 @@ var Bingo = Bingo || {};
 Bingo.StoryState = {
   create: function() 
   {
-      console.log('k');
       //holds the card buttons so they can be removed when the screen changes
       this.cardGroup = this.add.group();
       //holds the dabber buttons so they can be removed when the screen changes
@@ -158,8 +157,6 @@ Bingo.StoryState = {
               Bingo.Images = images[button.index];
               //Audio for the 'time'
               Bingo.Audio = audio[button.index];
-              //Stop opening audio
-              this.backgroundAudio.stop();
               //Remove Cards
               this.cardGroup.removeAll();
               //Set Dabber Text
@@ -213,6 +210,8 @@ Bingo.StoryState = {
           {
               //Set the dabber color for the game
               Bingo.dabber = button.color;
+              //Stop opening audio
+              this.backgroundAudio.stop();
               //Call to move to next screen
               this.migrate();
           }, this);
